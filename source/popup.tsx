@@ -33,7 +33,6 @@ function Popup() {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(markdown);
-      alert("Copied to clipboard!");
     } catch (err) {
       setError("Failed to copy to clipboard");
     }
