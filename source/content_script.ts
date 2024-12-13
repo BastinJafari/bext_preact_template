@@ -1,42 +1,33 @@
-/**
- * BigDaddy script: https://github.com/ivebencrazy/BigDaddy
- * Replaces all instances of the word "data" with "daddy".
- */
-
 /// <reference lib="dom" />
 
-globalThis.alert("Running Sample Browser Extension");
-
-Array.prototype.forEach.call(
-  document.getElementsByTagName("*"),
-  replaceNode,
-);
-
-function replaceNode(element: Element) {
-  const stack: Node[] = [element];
-  const textNodes: Node[] = [];
-  let el = stack.pop();
-  while (el) {
-    Array.prototype.forEach.call(el.childNodes, (n: Node) => {
-      const { nodeName, nodeType } = n;
-
-      if (n.nodeName === "input" || nodeName === "textarea") return;
-      else if (nodeType === 1) stack.push(n); // is element node
-      else if (nodeType === 3) textNodes.push(n); // is text node
-    });
-    el = stack.pop();
+// Listen for messages from the popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "convertToMarkdown") {
+    convertToMarkdown()
+      .then(markdown => sendResponse({ success: true, markdown }))
+      .catch(error => sendResponse({ success: false, error: error.message }));
+    return true; // Required for async response
   }
+});
 
-  textNodes.forEach((textNode: Node) => {
-    if (textNode?.parentNode && textNode?.nodeValue) {
-      textNode.parentNode.replaceChild(
-        document.createTextNode(
-          textNode.nodeValue
-            .replace(/data/g, "daddy")
-            .replace(/Data/g, "Daddy"),
-        ),
-        textNode,
-      );
+async function convertToMarkdown() {
+  const currentUrl = window.location.href;
+  const jinaUrl = `https://r.jina.ai/${currentUrl}`;
+  
+  const headers = {
+    'Authorization': 'Bearer jina_431ebf610e864d9a9a551b8799d84e13OcnNjDuzeGEMKdZgW5yjSzBUgzDR',
+    'X-With-Generated-Alt': 'true'
+  };
+
+  try {
+    const response = await fetch(jinaUrl, { headers });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  });
+    const markdown = await response.text();
+    return markdown;
+  } catch (error) {
+    console.error('Error converting to markdown:', error);
+    throw error;
+  }
 }

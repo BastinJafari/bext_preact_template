@@ -25,7 +25,12 @@
   },
   "permissions": [
     "storage",
-    "tabs"
+    "tabs",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://r.jina.ai/*",
+    "*://*/*"
   ],
   "action": {
     "default_popup": "popup.html",
