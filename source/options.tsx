@@ -17,14 +17,17 @@ if (mountPoint) {
 }
 
 function App() {
+  const route = useRoute();
+  
   return (
     <main>
       <Header title="Browser Extension Boilerplate" />
       <Switch
-        value={useRoute()}
-        defaultCase={<Home default path="/home" />}
+        value={route}
+        defaultCase={<Options path="/options" />}
         cases={{
-          "#options": <Options path="/options" />,
+          "options": <Options path="/options" />,
+          "home": <Home path="/home" />,
         }}
       />
     </main>

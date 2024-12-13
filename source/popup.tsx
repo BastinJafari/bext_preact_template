@@ -41,7 +41,7 @@ function Popup() {
 
   return (
     <main style={{ padding: "1rem", minWidth: "300px" }}>
-      <h1>Markdown Converter</h1>
+      <h1>Markdown Converter Windsurf</h1>
       <button 
         onClick={convertPage}
         disabled={loading}
