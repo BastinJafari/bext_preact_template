@@ -16,6 +16,7 @@ export default function Options(_props: OptionsProps) {
     timeout: 30,
     cacheEnabled: true,
     streamingMode: false,
+    adaptiveCrawling: false,
   });
 
   useEffect(() => {

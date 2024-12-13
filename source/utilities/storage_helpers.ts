@@ -1,17 +1,40 @@
 export interface ReaderSettings {
+  // Image caption settings
   withGeneratedAlt: boolean;
-  responseFormat: 'markdown' | 'html' | 'text';
-  timeout: number;
+  
+  // Response format settings
+  responseFormat: 'markdown' | 'html' | 'text' | 'screenshot';
+  
+  // Cookie and proxy settings
+  setCookie?: string;
+  proxyUrl?: string;
+  
+  // Cache settings
   cacheEnabled: boolean;
+  cacheTolerance?: number;
+  
+  // Content selection settings
+  targetSelector?: string;
+  waitForSelector?: string;
+  
+  // SPA and timeout settings
+  timeout: number;
   streamingMode: boolean;
+  
+  // Search settings
+  searchSites?: string[];
+  
+  // Crawler settings
+  adaptiveCrawling: boolean;
 }
 
 const defaultSettings: ReaderSettings = {
   withGeneratedAlt: false,
   responseFormat: 'markdown',
-  timeout: 30,
   cacheEnabled: true,
+  timeout: 30,
   streamingMode: false,
+  adaptiveCrawling: false
 };
 
 // Legacy storage interface for backward compatibility
@@ -50,7 +73,7 @@ export async function saveOptions(options: OptionsData): Promise<void> {
   await chrome.storage.sync.set({ options });
 }
 
-export function addStorageListener(callback: (changes: Chrome.StorageChanges) => void): void {
+export function addStorageListener(callback: (changes: chrome.storage.StorageChange) => void): void {
   chrome.storage.onChanged.addListener(callback);
 }
 
